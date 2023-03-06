@@ -22,28 +22,14 @@ class MainActivity : AppCompatActivity() {
         uri?.let { onImageSelected(it) }
     }
 
-    // TODO: implement Firebase instance variables
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Initialize Firebase Auth and check if the user is signed in
-        // TODO: implement
-
-        // Initialize Realtime Database and FirebaseRecyclerAdapter
-        // TODO: implement
-
-        // Disable the send button when there's no text in the input field
-        // See MyButtonObserver for details
         binding.messageEditText.addTextChangedListener(MyButtonObserver(binding.sendButton))
 
-        // When the send button is clicked, send a text message
-        // TODO: implement
-
-        // When the image button is clicked, launch the image picker
         binding.addMessageImageView.setOnClickListener {
             openDocument.launch(arrayOf("image/*"))
         }
@@ -51,8 +37,6 @@ class MainActivity : AppCompatActivity() {
 
     public override fun onStart() {
         super.onStart()
-        // Check if user is signed in.
-        // TODO: implement
     }
 
     public override fun onPause() {
@@ -80,16 +64,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun onImageSelected(uri: Uri) {
-        // TODO: implement
+        
     }
 
     private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String?) {
-        // Upload the image to Cloud Storage
-        // TODO: implement
+
     }
 
     private fun signOut() {
-        // TODO: implement
+
     }
 
     companion object {
