@@ -27,8 +27,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // This codelab uses View Binding
-        // See: https://developer.android.com/topic/libraries/view-binding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
