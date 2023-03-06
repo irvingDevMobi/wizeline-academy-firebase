@@ -9,7 +9,7 @@ android {
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.testing"
+        applicationId "com.wizeline.academy.fireabase"
         minSdk 24
         targetSdk 33
         versionCode 1
@@ -51,20 +51,10 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.media:media:1.6.0'
     implementation 'androidx.core:core-ktx:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Google
     implementation 'com.google.android.gms:play-services-auth:20.4.1'
-
-    // Firebase
-    implementation platform('com.google.firebase:firebase-bom:31.2.2')
-    implementation 'com.google.firebase:firebase-database-ktx'
-    implementation 'com.google.firebase:firebase-storage-ktx'
-    implementation 'com.google.firebase:firebase-auth-ktx'
-
-    // Firebase UI
-    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
-    implementation 'com.firebaseui:firebase-ui-database:8.0.2'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
 
     // Testing dependencies
     testImplementation 'junit:junit:4.13.2'
@@ -72,4 +62,15 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     androidTestImplementation 'androidx.test:runner:1.5.2'
     androidTestImplementation 'androidx.test:rules:1.5.0'
+
+    // TODO: 0 add dependencies
+    // Firebase
+    /*implementation platform('com.google.firebase:firebase-bom:31.2.2')
+    implementation 'com.google.firebase:firebase-database-ktx'
+    implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+
+    // Firebase UI
+    implementation 'com.firebaseui:firebase-ui-auth:8.0.2'*/
+
 }

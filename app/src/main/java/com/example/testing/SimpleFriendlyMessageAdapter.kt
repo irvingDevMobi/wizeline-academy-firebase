@@ -1,7 +1,6 @@
 package com.example.testing
 
 import android.graphics.Color
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -13,15 +12,11 @@ import com.example.testing.MainActivity.Companion.ANONYMOUS
 import com.example.testing.databinding.ImageMessageBinding
 import com.example.testing.databinding.MessageBinding
 import com.example.testing.model.FriendlyMessage
-import com.firebase.ui.database.FirebaseRecyclerAdapter
-import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.ktx.storage
 
-class FriendlyMessageAdapter(
-    private val options: FirebaseRecyclerOptions<FriendlyMessage>,
+class SimpleFriendlyMessageAdapter(
+    private val messages: MutableList<FriendlyMessage> = mutableListOf(),
     private val currentUserName: String?
-) : FirebaseRecyclerAdapter<FriendlyMessage, RecyclerView.ViewHolder>(options) {
+) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -36,21 +31,33 @@ class FriendlyMessageAdapter(
         }
     }
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int, model: FriendlyMessage) {
-        if (options.snapshots[position].text != null) {
-            (holder as MessageViewHolder).bind(model)
+    override fun getItemCount(): Int = messages.size
+
+    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        val message = messages[position]
+        if (message.imageUrl.isNullOrBlank()) {
+            (holder as MessageViewHolder).bind(message)
         } else {
-            (holder as ImageMessageViewHolder).bind(model)
+            (holder as ImageMessageViewHolder).bind(message)
         }
     }
 
     override fun getItemViewType(position: Int): Int {
-        return if (options.snapshots[position].text != null) VIEW_TYPE_TEXT else VIEW_TYPE_IMAGE
+        return if (messages[position].imageUrl.isNullOrBlank()) VIEW_TYPE_TEXT else VIEW_TYPE_IMAGE
     }
 
-    inner class MessageViewHolder(private val binding: MessageBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MessageViewHolder(private val binding: MessageBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FriendlyMessage) {
-            // TODO: implement
+            binding.messageTextView.text = item.text
+            setTextColor(item.name, binding.messageTextView)
+
+            binding.messengerTextView.text = item.name ?: ANONYMOUS
+            if (null == item.photoUrl) {
+                binding.messengerImageView.setImageResource(R.drawable.ic_account_circle_black_36dp)
+            } else {
+                loadImageIntoView(binding.messengerImageView, item.photoUrl)
+            }
         }
 
         private fun setTextColor(userName: String?, textView: TextView) {
@@ -67,13 +74,16 @@ class FriendlyMessageAdapter(
     inner class ImageMessageViewHolder(private val binding: ImageMessageBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: FriendlyMessage) {
-            // TODO: implement
+            item.imageUrl?.let {
+                loadImageIntoView(binding.messageImageView, item.imageUrl, false)
+            }
         }
     }
 
     private fun loadImageIntoView(view: ImageView, url: String, isCircular: Boolean = true) {
         if (url.startsWith("gs://")) {
-            val storageReference = Firebase.storage.getReferenceFromUrl(url)
+            // TODO:
+            /*val storageReference = Firebase.storage.getReferenceFromUrl(url)
             storageReference.downloadUrl
                 .addOnSuccessListener { uri ->
                     val downloadUrl = uri.toString()
@@ -85,7 +95,7 @@ class FriendlyMessageAdapter(
                         "Getting download url was not successful.",
                         e
                     )
-                }
+                }*/
         } else {
             loadWithGlide(view, url, isCircular)
         }
@@ -98,6 +108,12 @@ class FriendlyMessageAdapter(
             requestBuilder = requestBuilder.transform(CircleCrop())
         }
         requestBuilder.into(view)
+    }
+
+    fun updateData(messages: MutableList<FriendlyMessage>) {
+        this.messages.clear()
+        this.messages.addAll(messages)
+        notifyDataSetChanged()
     }
 
     companion object {

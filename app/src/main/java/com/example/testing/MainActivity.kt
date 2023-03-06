@@ -1,18 +1,13 @@
 package com.example.testing
 
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ProgressBar
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.testing.databinding.ActivityMainBinding
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.StorageReference
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -28,11 +23,28 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.messageEditText.addTextChangedListener(MyButtonObserver(binding.sendButton))
+        // TODO: 1 validate if a user exists, if not go to SignInActivity
 
+        val simpleAdapter = SimpleFriendlyMessageAdapter(
+            mutableListOf(),
+            ""// TODO: 4b getUserName()
+        )
+        binding.progressBar.visibility = ProgressBar.INVISIBLE
+        manager = LinearLayoutManager(this)
+        manager.orientation = LinearLayoutManager.VERTICAL
+        binding.messageRecyclerView.layoutManager = manager
+        binding.messageRecyclerView.adapter = simpleAdapter
+        binding.messageEditText.addTextChangedListener(MyButtonObserver(binding.sendButton))
         binding.addMessageImageView.setOnClickListener {
             openDocument.launch(arrayOf("image/*"))
         }
+
+
+        // TODO: 5 send messages to Firebase Real Time Database
+
+
+        // TODO: 6 listen changes of Firebase Real Time Database
+
     }
 
     public override fun onStart() {
@@ -63,17 +75,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // TODO: 7 add implementation to send Image message
     private fun onImageSelected(uri: Uri) {
-        
-    }
-
-    private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String?) {
 
     }
+
+    // TODO: 7b and upload file to Firebase Storage
+    /*private fun putImageInStorage(storageReference: StorageReference, uri: Uri, key: String) {
+
+    }*/
 
     private fun signOut() {
-
+        // TODO: 3 SignOut using Firebase AuthUi
     }
+
+    // TODO: 4 add helper functions
 
     companion object {
         private const val TAG = "MainActivity"
